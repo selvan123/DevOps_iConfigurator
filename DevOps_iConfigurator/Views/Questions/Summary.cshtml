@@ -1,0 +1,188 @@
+﻿
+
+@{
+    Layout = null;
+}
+<script type="text/javascript">
+    function JSFunction() {
+        location.href = '@Url.Action("Index", "Tools")';
+    }
+      function JSFunction1() {
+        location.href = '@Url.Action("UserDashBoard", "Questions")';
+    }
+</script>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, maximum-scale=1">
+    <title>Homepage</title>
+    <link rel="icon" href="favicon.png" type="image/png">
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css">  
+    <link href="css/linecons.css" rel="stylesheet" type="text/css">
+    <link href="css/font-awesome.css" rel="stylesheet" type="text/css">
+    <link href="css/responsive.css" rel="stylesheet" type="text/css">
+    <link href="css/animate.css" rel="stylesheet" type="text/css">
+    <link href="~/css/style.css" rel="stylesheet" />
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,900,700,700italic,400italic,300italic,300,100italic,100,900italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Dosis:400,500,700,800,600,300,200' rel='stylesheet' type='text/css'>
+    <link href="~/css/main.css" rel="stylesheet" />
+</head>
+<body>
+    <header id="header_outer">
+        <div class="container">
+            <div class="header_section">
+                <div class="logo"><a href="javascript:void(0)"><img src="~/img/CGLogo.png" alt=""></a></div>
+                <nav class="nav" id="nav1">
+                    <ul>
+                        <li><a href="@Url.Action("Index", "Home")" class="contact_btn">Home</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <h2>
+        @ViewBag.Message
+        <br />
+    </h2>
+    <table align="center" border="1" style="width:100%">
+        <tbody>
+            <tr>
+                <th>TOOLS</th>
+                <th>INSTANCE TYPE</th>
+                <th>COST</th>
+            </tr>
+            @{
+                DevOpsCGEntities db = new DevOpsCGEntities();
+                DevOps_iConfigurator.Helper.AwsCost hp = new DevOps_iConfigurator.Helper.AwsCost();
+                string[] ids = Session["Option"].ToString().Split(',');
+                string t2microcost = hp.GetAwsPrice("Linux", "t2.micro");
+                string t2mediumcost = hp.GetAwsPrice("Linux", "t2.medium");
+                double cost = 0; 
+
+                <tr>
+
+                    <td align="center">
+                        @for (int i = 0; i < 3; i++)
+                        {
+                            cost += Convert.ToDouble(t2microcost.Substring(1, 6));
+                            int opid = Convert.ToInt32(ids[i]);
+                            string option = db.Questions_Options.First(a => a.OID == opid).Options.ToString();
+                            @option
+                            if (i < 2)
+                            {
+                                <text>+</text>
+                            }
+                        }
+                    </td>
+                    <td align="center">t2 micro</td>               
+                    <td align="center">@t2microcost</td>
+                    
+                   
+                </tr>
+
+                for (int i = 3; i < 4; i++)
+                {
+                    cost += Convert.ToDouble(t2mediumcost.Substring(1, 6));
+                    int opid = Convert.ToInt32(ids[i]);
+                    string option = db.Questions_Options.First(a => a.OID == opid).Options.ToString();
+                    <tr>
+                        <td align="center">@option</td>
+                        <td align="center">t2 medium</td>
+                        <td align="center">@t2mediumcost</td>
+                     
+                    </tr>
+
+
+                }
+
+                for (int i = 7; i < 9; i++)
+                {
+                    cost += Convert.ToDouble(t2microcost.Substring(1, 6));
+                    int opid = Convert.ToInt32(ids[i]);
+                    string option = db.Questions_Options.First(a => a.OID == opid).Options.ToString();
+                    <tr>
+                        <td align="center">@option</td>
+                        <td align="center">t2 micro</td>
+                        <td align="center">@t2microcost</td>
+                     
+                    </tr>
+                }               
+             
+}
+        </tbody>
+    </table>
+    <div><h5> Total Cost: $@cost;</h5></div> 
+   
+            <div id="filters" class="sixteen columns">
+                <ul class="clearfix">
+                    <li>
+                        <a class="" href="#" data-filter=".branding" onclick="JSFunction()">
+               
+                            <h5>Submit</h5>
+                        </a>
+                    </li>
+                    </ul>
+                </div>
+    <!-- ********************************************************* -->
+    <center><h2>OR</h2></center>
+    <!-- ********************************************************* -->
+
+    <table align="center" border="1" style="width:100%">
+        <tbody>
+            <tr>
+                <th>TOOLS</th>
+                <th>INSTANCE TYPE</th>
+                <th>COST</th>
+            </tr>          
+@{
+    DevOpsCGEntities db1 = new DevOpsCGEntities();
+    string[] id = Session["Option"].ToString().Split(',');
+    <tr>
+        <td align="center">
+            @for (int i = 0; i < 3; i++)
+            {
+                int opid = Convert.ToInt32(ids[i]);
+                string option = db.Questions_Options.First(a => a.OID == opid).Options.ToString();
+                @option
+                if (i < 2)
+                {
+                    <text>+</text>
+                }
+            }
+        </td>  
+        <td rowspan="5" align="center">t2 micro</td>
+        <td rowspan="5" align="center">$100</td>
+    </tr>
+            for (int i = 3; i < 4; i++)
+            {
+                int opid = Convert.ToInt32(ids[i]);
+                string option = db.Questions_Options.First(a => a.OID == opid).Options.ToString();
+                <tr>
+                    <td align="center">@option</td>
+                </tr>
+            }
+
+            for (int i = 7; i < 9; i++)
+            {
+                int opid = Convert.ToInt32(ids[i]);
+                string option = db.Questions_Options.First(a => a.OID == opid).Options.ToString();
+                <tr>
+                    <td align="center">@option</td>         
+                </tr>
+            }   
+}
+        </tbody>
+    </table>
+    <div id="filters" class="sixteen columns">
+        <ul class="clearfix">
+            <li>
+                <a class="" href="#" data-filter=".branding" onclick="JSFunction1()">
+                    <h5>Submit</h5>
+                </a>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

@@ -1,0 +1,333 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="DevOpsCGModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="DevOps_Questions">
+          <Key>
+            <PropertyRef Name="QID" />
+          </Key>
+          <Property Name="QID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SectionID" Type="int" />
+          <Property Name="Questions" Type="varchar" MaxLength="1000" />
+        </EntityType>
+        <EntityType Name="Questions">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Desc" Type="varchar" MaxLength="1000" />
+          <Property Name="PrevQuestionID" Type="int" />
+          <Property Name="PageID" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'DevOpsCG.dbo.Questions_Options' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Questions_Options">
+          <Key>
+            <PropertyRef Name="OID" />
+          </Key>
+          <Property Name="OID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuestionID" Type="int" />
+          <Property Name="Options" Type="varchar" MaxLength="1000" />
+          <Property Name="NextQID" Type="int" />
+        </EntityType>
+        <EntityType Name="Section">
+          <Key>
+            <PropertyRef Name="SID" />
+          </Key>
+          <Property Name="SID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Desc" Type="varchar" MaxLength="1000" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'DevOpsCG.sys.database_firewall_rules' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <Association Name="FK__DevOps_Qu__Secti__04E4BC85">
+          <End Role="Section" Type="Self.Section" Multiplicity="0..1" />
+          <End Role="DevOps_Questions" Type="Self.DevOps_Questions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Section">
+              <PropertyRef Name="SID" />
+            </Principal>
+            <Dependent Role="DevOps_Questions">
+              <PropertyRef Name="SectionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Questions__Quest__08B54D69">
+          <End Role="DevOps_Questions" Type="Self.DevOps_Questions" Multiplicity="0..1" />
+          <End Role="Questions_Options" Type="Self.Questions_Options" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DevOps_Questions">
+              <PropertyRef Name="QID" />
+            </Principal>
+            <Dependent Role="Questions_Options">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="get_details" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="pageNo" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="Sp_GetDesc" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="No" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Sp_GetQuesID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="questionID" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="DevOpsCGModelStoreContainer">
+          <EntitySet Name="DevOps_Questions" EntityType="Self.DevOps_Questions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Questions" EntityType="Self.Questions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Section" EntityType="Self.Section" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Questions_Options" EntityType="Self.Questions_Options" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Questions_Options].[OID] AS [OID], 
+    [Questions_Options].[QuestionID] AS [QuestionID], 
+    [Questions_Options].[Options] AS [Options], 
+    [Questions_Options].[NextQID] AS [NextQID]
+    FROM [dbo].[Questions_Options] AS [Questions_Options]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK__DevOps_Qu__Secti__04E4BC85" Association="Self.FK__DevOps_Qu__Secti__04E4BC85">
+            <End Role="Section" EntitySet="Section" />
+            <End Role="DevOps_Questions" EntitySet="DevOps_Questions" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Questions__Quest__08B54D69" Association="Self.FK__Questions__Quest__08B54D69">
+            <End Role="DevOps_Questions" EntitySet="DevOps_Questions" />
+            <End Role="Questions_Options" EntitySet="Questions_Options" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DevOpsCGModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Question">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Desc" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="PrevQuestionID" Type="Int32" />
+          <Property Name="PageID" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityContainer Name="DevOpsCGEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Questions" EntityType="Self.Question" />
+          <FunctionImport Name="Sp_GetDesc" ReturnType="Collection(DevOpsCGModel.Sp_GetDesc_Result)">
+          <Parameter Name="No" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetDescription" EntitySet="Questions" ReturnType="Collection(DevOpsCGModel.Question)">
+          <Parameter Name="No" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="get_details" ReturnType="Collection(String)">
+            <Parameter Name="pageNo" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Sp_GetQuesID" ReturnType="Collection(DevOpsCGModel.Sp_GetQuesID_Result)">
+          <Parameter Name="questionID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="get_details1" ReturnType="Collection(String)">
+          <Parameter Name="pageNo" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="DevOps_Questions" EntityType="DevOpsCGModel.DevOps_Questions" />
+          <EntitySet Name="Sections" EntityType="DevOpsCGModel.Section" />
+          <EntitySet Name="Questions_Options" EntityType="DevOpsCGModel.Questions_Options" />
+          <AssociationSet Name="FK__DevOps_Qu__Secti__04E4BC85" Association="DevOpsCGModel.FK__DevOps_Qu__Secti__04E4BC85">
+            <End Role="Section" EntitySet="Sections" />
+            <End Role="DevOps_Questions" EntitySet="DevOps_Questions" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Questions__Quest__08B54D69" Association="DevOpsCGModel.FK__Questions__Quest__08B54D69">
+            <End Role="DevOps_Questions" EntitySet="DevOps_Questions" />
+            <End Role="Questions_Options" EntitySet="Questions_Options" />
+          </AssociationSet>
+          <FunctionImport Name="SearchQuestion">
+            <Parameter Name="questionID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SearchQuestion1" ReturnType="Collection(DevOpsCGModel.SearchQuestion1_Result)">
+            <Parameter Name="questionID" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="Sp_GetDesc_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Desc" Nullable="true" MaxLength="1000" />
+          <Property Type="Int32" Name="PrevQuestionID" Nullable="true" />
+          <Property Type="String" Name="PageID" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="Sp_GetQuesID_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="Int32" Name="QuestionID" Nullable="true" />
+          <Property Type="String" Name="Options" Nullable="true" MaxLength="1000" />
+          <Property Type="Int32" Name="NextQID" Nullable="true" />
+          <Property Type="Int32" Name="ID1" Nullable="false" />
+          <Property Type="Int32" Name="SectionID" Nullable="true" />
+          <Property Type="String" Name="Questions" Nullable="true" MaxLength="1000" />
+          <Property Type="Int32" Name="ID2" Nullable="false" />
+          <Property Type="String" Name="Desc" Nullable="true" MaxLength="1000" />
+        </ComplexType>
+        <EntityType Name="DevOps_Questions">
+          <Key>
+            <PropertyRef Name="QID" />
+          </Key>
+          <Property Name="QID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SectionID" Type="Int32" />
+          <Property Name="Questions" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Section" Relationship="DevOpsCGModel.FK__DevOps_Qu__Secti__04E4BC85" FromRole="DevOps_Questions" ToRole="Section" />
+          <NavigationProperty Name="Questions_Options" Relationship="DevOpsCGModel.FK__Questions__Quest__08B54D69" FromRole="DevOps_Questions" ToRole="Questions_Options" />
+        </EntityType>
+        <EntityType Name="Section">
+          <Key>
+            <PropertyRef Name="SID" />
+          </Key>
+          <Property Name="SID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Desc" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="DevOps_Questions" Relationship="DevOpsCGModel.FK__DevOps_Qu__Secti__04E4BC85" FromRole="Section" ToRole="DevOps_Questions" />
+        </EntityType>
+        <EntityType Name="Questions_Options">
+          <Key>
+            <PropertyRef Name="OID" />
+          </Key>
+          <Property Name="OID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionID" Type="Int32" />
+          <Property Name="Options" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="NextQID" Type="Int32" />
+          <NavigationProperty Name="DevOps_Questions" Relationship="DevOpsCGModel.FK__Questions__Quest__08B54D69" FromRole="Questions_Options" ToRole="DevOps_Questions" />
+        </EntityType>
+        <Association Name="FK__DevOps_Qu__Secti__04E4BC85">
+          <End Type="DevOpsCGModel.Section" Role="Section" Multiplicity="0..1" />
+          <End Type="DevOpsCGModel.DevOps_Questions" Role="DevOps_Questions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Section">
+              <PropertyRef Name="SID" />
+            </Principal>
+            <Dependent Role="DevOps_Questions">
+              <PropertyRef Name="SectionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Questions__Quest__08B54D69">
+          <End Type="DevOpsCGModel.DevOps_Questions" Role="DevOps_Questions" Multiplicity="0..1" />
+          <End Type="DevOpsCGModel.Questions_Options" Role="Questions_Options" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DevOps_Questions">
+              <PropertyRef Name="QID" />
+            </Principal>
+            <Dependent Role="Questions_Options">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="SearchQuestion1_Result">
+          <Property Type="Int32" Name="SID" Nullable="false" />
+          <Property Type="String" Name="Desc" Nullable="true" MaxLength="1000" />
+          <Property Type="Int32" Name="QID" Nullable="false" />
+          <Property Type="String" Name="Questions" Nullable="true" MaxLength="1000" />
+          <Property Type="Int32" Name="OID" Nullable="false" />
+          <Property Type="String" Name="Options" Nullable="true" MaxLength="1000" />
+          <Property Type="Int32" Name="NextQID" Nullable="true" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DevOpsCGModelStoreContainer" CdmEntityContainer="DevOpsCGEntities">
+          <EntitySetMapping Name="Questions">
+            <EntityTypeMapping TypeName="DevOpsCGModel.Question">
+              <MappingFragment StoreEntitySet="Questions">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Desc" ColumnName="Desc" />
+                <ScalarProperty Name="PrevQuestionID" ColumnName="PrevQuestionID" />
+                <ScalarProperty Name="PageID" ColumnName="PageID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Sp_GetDesc" FunctionName="DevOpsCGModel.Store.Sp_GetDesc">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DevOpsCGModel.Sp_GetDesc_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Desc" ColumnName="Desc" />
+                <ScalarProperty Name="PrevQuestionID" ColumnName="PrevQuestionID" />
+                <ScalarProperty Name="PageID" ColumnName="PageID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetDescription" FunctionName="DevOpsCGModel.Store.Sp_GetDesc" />
+          <FunctionImportMapping FunctionImportName="Sp_GetQuesID" FunctionName="DevOpsCGModel.Store.Sp_GetQuesID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DevOpsCGModel.Sp_GetQuesID_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+                <ScalarProperty Name="Options" ColumnName="Options" />
+                <ScalarProperty Name="NextQID" ColumnName="NextQID" />
+                <ScalarProperty Name="ID1" ColumnName="ID1" />
+                <ScalarProperty Name="SectionID" ColumnName="SectionID" />
+                <ScalarProperty Name="Questions" ColumnName="Questions" />
+                <ScalarProperty Name="ID2" ColumnName="ID2" />
+                <ScalarProperty Name="Desc" ColumnName="Desc" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="get_details1" FunctionName="DevOpsCGModel.Store.get_details" />
+          <EntitySetMapping Name="DevOps_Questions">
+            <EntityTypeMapping TypeName="DevOpsCGModel.DevOps_Questions">
+              <MappingFragment StoreEntitySet="DevOps_Questions">
+                <ScalarProperty Name="Questions" ColumnName="Questions" />
+                <ScalarProperty Name="SectionID" ColumnName="SectionID" />
+                <ScalarProperty Name="QID" ColumnName="QID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sections">
+            <EntityTypeMapping TypeName="DevOpsCGModel.Section">
+              <MappingFragment StoreEntitySet="Section">
+                <ScalarProperty Name="Desc" ColumnName="Desc" />
+                <ScalarProperty Name="SID" ColumnName="SID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Questions_Options">
+            <EntityTypeMapping TypeName="DevOpsCGModel.Questions_Options">
+              <MappingFragment StoreEntitySet="Questions_Options">
+                <ScalarProperty Name="NextQID" ColumnName="NextQID" />
+                <ScalarProperty Name="Options" ColumnName="Options" />
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+                <ScalarProperty Name="OID" ColumnName="OID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SearchQuestion" FunctionName="DevOpsCGModel.Store.Sp_GetQuesID">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SearchQuestion1" FunctionName="DevOpsCGModel.Store.Sp_GetQuesID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DevOpsCGModel.SearchQuestion1_Result">
+                <ScalarProperty Name="SID" ColumnName="SID" />
+                <ScalarProperty Name="Desc" ColumnName="Desc" />
+                <ScalarProperty Name="QID" ColumnName="QID" />
+                <ScalarProperty Name="Questions" ColumnName="Questions" />
+                <ScalarProperty Name="OID" ColumnName="OID" />
+                <ScalarProperty Name="Options" ColumnName="Options" />
+                <ScalarProperty Name="NextQID" ColumnName="NextQID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

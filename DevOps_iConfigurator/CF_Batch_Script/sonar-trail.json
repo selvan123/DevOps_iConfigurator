@@ -1,0 +1,53 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Launch an EC2 instance",
+    "Parameters": {
+        "KeyName": {
+            "Description": "Key Pair Name",
+            "Type": "AWS::EC2::KeyPair::KeyName"
+        },
+        "InstanceType": {
+            "Description": "Select one of these",
+            "Type": "String",
+            "Default": "t2.medium",
+            "AllowedValues": ["t2.micro", "t2.small", "t2.medium"]
+        }
+		},
+	    "Mappings" : {
+		"RegionToImageId" : {
+		"us-east-1":{"64":"ami-4fffc834"},
+		"us-east-2":{"64":"ami-ea87a78f"},
+        "us-west-2":{"64":"ami-aa5ebdd2"},
+		"ap-south-1":{"64":"ami-d7abd1b8"}
+		}
+		},
+	
+    "Resources": {
+        "Server": {
+            "Type": "AWS::EC2::Instance",
+            "Properties": {
+                "ImageId": {"Fn::FindInMap" : [ "RegionToImageId", { "Ref" : "AWS::Region" }, "64"]},
+                "InstanceType": {"Ref": "InstanceType"},
+                "KeyName": {"Ref": "KeyName"},
+                "UserData":
+				
+                {"Fn::Base64": {"Fn::Join": ["", [
+                    "#!/bin/bash -ex\n",
+					"sudo yum install java-1.8.0-openjdk.x86_64 -y \n",
+					"sudo yum remove java-1.7.0-openjdk -y \n",
+					"export JAVA_HOME=/usr/lib/jvm/jdk-1.8.0-openjdk.x86_64/ \n",
+					"PATH=$JAVA_HOME/bin:$PATH \n",
+					"export PATH=$PATH:$JAVA_HOME/bin \n",
+					"sudo wget -O /etc/yum.repos.d/sonar.repo http://downloads.sourceforge.net/project/sonar-pkg/rpm/sonar.repo \n",
+					"sudo yum install sonar -y \n",
+					"sudo service sonar start \n" ,
+					"sleep 20 \n",
+					"sudo service sonar restart \n"
+                ]]}
+                }
+            }
+        }
+    },
+    "Outputs": {
+    }
+}

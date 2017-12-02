@@ -1,0 +1,22 @@
+﻿@model IEnumerable<DevOps_iConfigurator.Models.Attributes>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<table class="table">
+
+    <h2>Cost Details Of Aws Instance </h2>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <h3>servicecode : @Html.DisplayFor(modelItem => item.servicecode)</h3>
+                @*<h4>LocationType : @Html.DisplayFor(modelItem => item.LocationType)</h4>*@
+                
+            </td>
+        </tr>
+
+    }
+</table>
+

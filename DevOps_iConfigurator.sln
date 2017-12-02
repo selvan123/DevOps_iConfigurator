@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevOps_iConfigurator", "DevOps_iConfigurator\DevOps_iConfigurator.csproj", "{FDE1E6C0-A664-47FB-84C7-8E2C611D6A91}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevOps_iConfiguratorTests", "DevOps_iConfiguratorTests\DevOps_iConfiguratorTests.csproj", "{70072841-000E-45BC-8F91-558C1708A5AB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FDE1E6C0-A664-47FB-84C7-8E2C611D6A91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDE1E6C0-A664-47FB-84C7-8E2C611D6A91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDE1E6C0-A664-47FB-84C7-8E2C611D6A91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDE1E6C0-A664-47FB-84C7-8E2C611D6A91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70072841-000E-45BC-8F91-558C1708A5AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70072841-000E-45BC-8F91-558C1708A5AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70072841-000E-45BC-8F91-558C1708A5AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70072841-000E-45BC-8F91-558C1708A5AB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {96D2DD24-8B05-422B-9167-B929BED20AA6}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 3
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://projdemo123.visualstudio.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = DevOps_iConfigurator\\DevOps_iConfigurator.csproj
+		SccProjectName1 = DevOps_iConfigurator
+		SccLocalPath1 = DevOps_iConfigurator
+		SccProjectUniqueName2 = DevOps_iConfiguratorTests\\DevOps_iConfiguratorTests.csproj
+		SccProjectName2 = DevOps_iConfiguratorTests
+		SccLocalPath2 = DevOps_iConfiguratorTests
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,129 @@
+﻿
+
+@model IEnumerable<DevOps_iConfigurator.SearchQuestion1_Result>
+
+<script type="text/javascript">
+    function JSFunction() {
+
+        var valu = 0;
+        var selid = 0;
+        var radios = document.getElementsByName('Question');
+
+        for (var i = 0, length = radios.length; i < length; i++) {
+            if (radios[i].checked) {
+                // do whatever you want with the checked radio
+                valu = (radios[i].value);
+                selid = (radios[i].id);
+
+                // only one radio can be logically checked, don't check the rest
+                break;
+            }
+        }
+        if (valu == 0)
+        {
+            alert("please select the option");
+        }
+        else
+        {
+           
+            location.href = '@Url.Action("Index", "Questions")?id=' + valu + '&&selid=' + selid;
+        }
+    }
+</script>
+
+
+
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, maximum-scale=1">
+    <title>Homepage</title>
+    <link rel="icon" href="favicon.png" type="image/png">
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
+    @*<link href="css/style.css" rel="stylesheet" type="text/css">*@
+    <link href="css/linecons.css" rel="stylesheet" type="text/css">
+    <link href="css/font-awesome.css" rel="stylesheet" type="text/css">
+    <link href="css/responsive.css" rel="stylesheet" type="text/css">
+    <link href="css/animate.css" rel="stylesheet" type="text/css">
+    <link href="~/css/style.css" rel="stylesheet" />
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,900,700,700italic,400italic,300italic,300,100italic,100,900italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Dosis:400,500,700,800,600,300,200' rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+    <!-- ********************************************************* -->
+    <header id="header_outer">
+        <div class="container">
+            <div class="header_section">
+                <div class="logo"><a href="javascript:void(0)"><img src="~/img/CGLogo.png" alt=""></a></div>
+                <nav class="nav" id="nav1">
+                    <ul>
+                        <li><a href="@Url.Action("Index","Home")" class="contact_btn">Home</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <table align="center" border="1">
+        <tr>
+            <td colspan="2" align="center">
+                <h2>Select your application details</h2>
+            </td>
+        </tr>
+        <tr>
+            <td align="center">
+                <div class="quote_section">
+                    <p>
+                        @Html.DisplayFor(modelItem => Model.First().Questions)
+                        <br />
+                    </p>
+                    <div>
+                        <table align="center">
+                            <tr>
+                                <td>
+                                    @foreach (var item1 in Model)
+                                    {
+                                        <font size="3">
+                                            <input type="radio" name="Question" id=@Html.DisplayFor(modelItem => item1.OID) value=@Html.DisplayFor(modelItem => item1.NextQID) />
+                                            @Html.DisplayFor(modelItem => item1.Options)
+                                        </font>
+                                    }
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    @{
+                        string Disabled = "block";
+                        if (Model.First().Questions.Equals("What SCM tool is required?"))
+                        {
+                            Disabled = "none";
+                        }                        
+                    }
+                    <div id="filters" class="sixteen columns">
+                        <ul class="clearfix">
+                            <li>
+                                <a class="" href="#" data-filter=".branding" onclick="window.history.go(-1); return false;" style="display:@Disabled;">
+                                    <h5>Back</h5>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="" href="#" data-filter=".branding" onclick="JSFunction()">
+                                    <h5>Next</h5>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
+
+
+
+
+

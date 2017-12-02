@@ -1,0 +1,62 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Launch an EC2 instance",
+    "Parameters": {
+        "KeyName": {
+            "Description": "Key Pair Name",
+            "Type": "AWS::EC2::KeyPair::KeyName",
+            "Default": "jenkinskey"
+        },
+        "InstanceType": {
+            "Description": "Select one of these",
+            "Type": "String",
+            "Default": "t2.micro",
+            "AllowedValues": ["t2.micro", "t2.small", "t2.medium"]
+        }
+		},
+	    "Mappings" : {
+		"RegionToImageId" : {
+		"us-east-1":{"64":"ami-4fffc834"},
+		"us-east-2":{"64":"ami-ea87a78f"},
+        "us-west-2":{"64":"ami-aa5ebdd2"},
+		"ap-south-1":{"64":"ami-d7abd1b8"}
+		}
+		},
+	
+    "Resources": {
+        "Server": {
+            "Type": "AWS::EC2::Instance",
+            "Properties": {
+                "ImageId": {"Fn::FindInMap" : [ "RegionToImageId", { "Ref" : "AWS::Region" }, "64"]},
+                "InstanceType": {"Ref": "InstanceType"},
+                "KeyName": {"Ref": "KeyName"},
+                "UserData":
+				
+                {"Fn::Base64": {"Fn::Join": ["", [
+                    "#!/bin/bash -ex\n",
+                    "yum update -y\n", 
+                    "yum install java-1.8.0 -y\n",
+					"yum remove java-1.7.0-openjdk -y\n",
+					"wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo \n",
+					"rpm --import http://pkg.jenkins-ci.org/redhat-stable/jenkins-ci.org.key \n",
+					"yum install jenkins -y\n",
+					"service jenkins start\n",
+					"chkconfig jenkins on\n",
+					"sleep 20 \n",
+					"wget https://s3-us-west-2.amazonaws.com/amitbucket786/jobs.tar.gz\n",
+                    "tar xvzf jobs.tar.gz -C /var/lib/jenkins/jobs\n",
+					"sleep 20 \n",
+				    "sudo rm -rf /var/lib/jenkins/secrets/initialAdminPassword\n",
+					"sleep 20 \n",
+					"wget https://s3.amazonaws.com/amitbucketcredentials/users.tar.gz\n",
+                    "tar xvzf users.tar.gz -C /var/lib/jenkins/users\n",
+					"service jenkins restart\n"
+					
+                ]]}
+                }
+            }
+        }
+    },
+    "Outputs": {
+    }
+}
