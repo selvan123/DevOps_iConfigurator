@@ -1,9 +1,8 @@
-﻿version: 0.0
+version: 0.0
 os: windows
 files:
   - source: \
     destination: C:\temp\WebApp\MusicWorld
-  
 hooks:
   BeforeInstall:
     - location: .\StageArtifact.ps1
